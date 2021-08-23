@@ -1,0 +1,50 @@
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import datetime
+
+def div(soup,class_path):
+    soupdiv = soup.find_all('div', {'class':class_path})
+    spans = soupdiv[0].find_all('span')
+    text = [span.get_text() for span in spans]
+    return text
+
+
+ua = {'user-agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36'}
+def rt_stock_price(stock_code):
+    url = 'https://finance.yahoo.com/quote/'+stock_code
+    r = requests.get(url,headers = ua)
+    soup = BeautifulSoup(r.text,'html.parser')
+    price_text = div(soup,'My(6px) Pos(r) smartphone_Mt(6px)')
+    price, change = price_text[0], price_text[1]
+    volume_text = div(soup,'D(ib) W(1/2) Bxz(bb) Pend(12px) Va(t) ie-7_D(i) smartphone_D(b) smartphone_W(100%) smartphone_Pend(0px) smartphone_BdY smartphone_Bdc($seperatorColor)')
+    for count, target in enumerate(volume_text):
+        if target=='Volume':
+            volume = volume_text[count+1]
+    
+    
+    
+    
+    
+    return price, change, volume
+
+Stock = ['AAPL','TSLA','SQ']
+#Example
+
+while(True):
+    info =[]
+    col =[]
+    time_stamp = datetime.datetime.now()-datetime.timedelta(hours=13)
+    time_stamp=time_stamp.strftime('%Y-%m-%d %H:%M:%S')
+    for stock_code in Stock:
+        price, change,volume = rt_stock_price(stock_code)
+        info.append(price)
+        info.extend([change])
+        info.extend([volume])
+    col =[time_stamp]
+    col.extend(info)
+    df = pd.DataFrame(col)
+    df = df.T
+    df.to_csv(str('stockdata.csv'),mode ='a', header=False)
+    print(col)
+    
