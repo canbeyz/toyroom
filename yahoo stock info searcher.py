@@ -38,4 +38,9 @@ print('毛利率： '+str(stock.info['grossMargins']))
 print('利润率： '+ str(stock.info['profitMargins']))
 print('市值： '+str(stock.info['marketCap']/10000)+'万元')
 print('成交量： '+ str(stock.info['volume']/10000)+'万元')
-print('市盈率： '+ str(stock.info['trailingPE']))
+try:
+    print('市盈率： '+ str(stock.info['trailingPE']))
+except:
+    print('市盈率：-')
+print('机构持有人： ')
+print(stock.institutional_holders)
