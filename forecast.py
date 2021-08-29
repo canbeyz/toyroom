@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
+#This project trains a model with LSTM and 30-day rolling basis data to forecast future 5 days stock prices.
 
 #import packages used in this project
 import math
